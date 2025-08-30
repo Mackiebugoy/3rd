@@ -1,0 +1,83 @@
+CREATE DATABASE UGMANA;
+
+USE UGMANA;
+
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(50)
+);
+
+INSERT INTO Student (StudentID, Name) VALUES
+(1, 'Alice'),
+(2, 'Bob');
+
+CREATE TABLE Instructor (
+    InstructorID INT PRIMARY KEY,
+    InstructorName VARCHAR(50),
+    DepartmentID INT
+);
+
+INSERT INTO Instructor (InstructorID, InstructorName, DepartmentID) VALUES
+(501, 'Smith', 302),
+(502, 'Johnson', 302),
+(503, 'Baino', 303);
+
+CREATE TABLE Department (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(50)
+);
+
+INSERT INTO Department (DepartmentID, DepartmentName) VALUES
+(301, 'CIT'),
+(302, 'CJE'),
+(303, 'CAF'),
+(304, 'CE');
+
+CREATE TABLE Course (
+    CourseID INT PRIMARY KEY,
+    CourseName VARCHAR(50),
+    InstructorID INT
+);
+
+INSERT INTO Course (CourseID, CourseName, InstructorID) VALUES
+(101, 'Math', 501),
+(102, 'Science', NULL),
+(103, 'History', 502);
+
+CREATE TABLE Enrollment (
+    EnrollmentID INT PRIMARY KEY,
+    StudentID INT,
+    CourseID INT
+);
+
+INSERT INTO Enrollment (EnrollmentID, StudentID, CourseID) VALUES
+(201, 1, 101),
+(202, 3, 102);
+
+
+
+queries
+1. SELECT s.Name AS StudentName,
+       c.CourseName,
+       i.InstructorName,
+       d.DepartmentName
+FROM Student s
+INNER JOIN Enrollment e ON s.StudentID = e.StudentID
+INNER JOIN Course c ON e.CourseID = c.CourseID
+INNER JOIN Instructor i ON c.InstructorID = i.InstructorID
+INNER JOIN Department d ON i.DepartmentID = d.DepartmentID;
+
+
+2. Get all students and their enrolled courses, including those not enrolled in any course
+SELECT s.Name AS StudentName,
+       c.CourseName
+FROM Student s
+LEFT JOIN Enrollment e ON s.StudentID = e.StudentID
+LEFT JOIN Course c ON e.CourseID = c.CourseID;
+
+3. List all courses and students who are enrolled in them. If a course has no students, show it anyway
+SELECT c.CourseName,
+       s.Name AS StudentName
+FROM Course c
+LEFT JOIN Enrollment e ON c.CourseID = e.CourseID
+LEFT JOIN Student s ON e.StudentID = s.StudentID;

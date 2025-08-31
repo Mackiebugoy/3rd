@@ -1,0 +1,53 @@
+CREATE DATABASE UGMANA;
+USE UGMANA;
+
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(50)
+);
+INSERT INTO Student (StudentID, Name) VALUES
+(1, 'Alice'),
+(2, 'Bob');
+
+CREATE TABLE Department (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(50)
+);
+INSERT INTO Department (DepartmentID, DepartmentName) VALUES
+(301, 'CIT'),
+(302, 'CJE'),
+(303, 'CAF'),
+(304, 'CE');
+
+CREATE TABLE Instructor (
+    InstructorID INT PRIMARY KEY,
+    InstructorName VARCHAR(50),
+    DepartmentID INT,
+    FOREIGN KEY (DepartmentID) REFERENCES Department(DepartmentID)
+);
+INSERT INTO Instructor (InstructorID, InstructorName, DepartmentID) VALUES
+(501, 'Smith', 302),
+(502, 'Johnson', 302),
+(503, 'Baino', 303);
+
+CREATE TABLE Course (
+    CourseID INT PRIMARY KEY,
+    CourseName VARCHAR(50),
+    InstructorID INT,
+    FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
+);
+INSERT INTO Course (CourseID, CourseName, InstructorID) VALUES
+(101, 'Math', 501),
+(102, 'Science', NULL),
+(103, 'History', 502);
+
+CREATE TABLE Enrollment (
+    EnrollmentID INT PRIMARY KEY,
+    StudentID INT,
+    CourseID INT,
+    FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+);
+INSERT INTO Enrollment (EnrollmentID, StudentID, CourseID) VALUES
+(201, 1, 101),
+(202, 3, 102);
